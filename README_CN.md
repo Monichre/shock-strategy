@@ -28,7 +28,7 @@
     "api_key": "api key",
     "api_secret": "api secret",
     "api_passphrase": "api pass phrase",
-  	// 是否是沙盒环境  
+    // 是否是沙盒环境
     "is_sandbox": true,
     // 合约名称，比如：XBTUSDTM 
     "symbol": "contract name",

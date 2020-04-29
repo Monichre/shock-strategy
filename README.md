@@ -8,13 +8,9 @@ Down line: the lowest price of the past 30 Klines
 
 Range = (UP - DOWN) / (UP + DOWN)
 
-If range < a(threshold) & price breaks up the UP line, open long position,  
+If range < a(threshold) & price breaks up the UP line, open long position, if price falls below the DOWN line, close position.  
 
-If price falls below the DOWN line, close position.  
-
-If range < a(threshold) & price falls below the UP line, open short position,  
-
-If price breaks up the UP line, close position.  
+If range < a(threshold) & price falls below the UP line, open short position, if  price breaks up the UP line, close position.  
 
  
 

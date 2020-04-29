@@ -12,7 +12,6 @@ If range < a(threshold) & price breaks up the UP line, open long position, if pr
 
 If range < a(threshold) & price falls below the UP line, open short position, if  price breaks up the UP line, close position.  
 
- 
 
 **Moreover, KuCoin provides the transaction data of level 3, great matching engine, and the commission discount specially offers to the API customers, which could greatly reduce the disadvantages of the trading operations. At the same time, we offer the sandbox environment as the data testing support to avoid the risks.**  
 
@@ -48,7 +47,7 @@ If range < a(threshold) & price falls below the UP line, open short position, if
     // time frame of Kline, mesure time by minute, e.g.:60(60min)
     "resolution": "kline resolution,count by minute,such as 60,it means 60min(1h) kline",
     // threshold
-    "valve": "valve",
+    "valve": "valve"
   }
   ```
 

@@ -9,6 +9,22 @@ import requests
 from kumex.client import Trade
 
 
+def check_response_data(response_data):
+    if response_data.status_code == 200:
+        try:
+            d = response_data.json()
+        except ValueError:
+            raise Exception(response_data.content)
+        else:
+            if d and d.get('s'):
+                if d.get('s') == 'ok':
+                    return d
+                else:
+                    raise Exception("{}-{}".format(response_data.status_code, response_data.text))
+    else:
+        raise Exception("{}-{}".format(response_data.status_code, response_data.text))
+
+
 def get_kline(s, r, f, t, timeout=5, is_sandbox=False):
     headers = {}
     url = 'https://kitchen.kumex.com/kumex-kline/history'
@@ -32,86 +48,81 @@ def get_kline(s, r, f, t, timeout=5, is_sandbox=False):
     return check_response_data(response_data)
 
 
-def check_response_data(response_data):
-    if response_data.status_code == 200:
-        try:
-            d = response_data.json()
-        except ValueError:
-            raise Exception(response_data.content)
-        else:
-            if d and d.get('s'):
-                if d.get('s') == 'ok':
-                    return d
-                else:
-                    raise Exception("{}-{}".format(response_data.status_code, response_data.text))
-    else:
-        raise Exception("{}-{}".format(response_data.status_code, response_data.text))
+class Shock(object):
+
+    def __init__(self):
+        # read configuration from json file
+        with open('config.json', 'r') as file:
+            config = json.load(file)
+
+        self.api_key = config['api_key']
+        self.api_secret = config['api_secret']
+        self.api_passphrase = config['api_passphrase']
+        self.sandbox = config['is_sandbox']
+        self.symbol = config['symbol']
+        self.resolution = int(config['resolution'])
+        self.valve = float(config['valve'])
+        self.leverage = config['leverage']
+        self.size = config['size']
+        self.trade = Trade(self.api_key, self.api_secret, self.api_passphrase, is_sandbox=self.sandbox)
 
 
 if __name__ == "__main__":
-    # read configuration from json file
-    with open('config.json', 'r') as file:
-        config = json.load(file)
-
-    symbol = config['symbol']
-    resolution = config['resolution']
-    valve = config['valve']
-    api_key = config['api_key']
-    api_secret = config['api_secret']
-    api_passphrase = config['api_passphrase']
-    leverage = config['leverage']
-    size = config['size']
-    sandbox = config['is_sandbox']
-    trade = Trade(api_key, api_secret, api_passphrase, is_sandbox=sandbox)
+    shock = Shock()
 
     while 1:
         time_to = int(time.time())
-        time_from = time_to - resolution * 60 * 35
-        data = get_kline(symbol, resolution, time_from, time_to, is_sandbox=sandbox)
+        time_from = time_to - shock.resolution * 60 * 35
+        data = get_kline(shock.symbol, shock.resolution, time_from, time_to, is_sandbox=shock.sandbox)
         print('now time =', time_to)
         print('symbol closed time =', data['t'][-1])
         if time_to != data['t'][-1]:
             continue
-        now_price = data['c'][-1]
+        now_price = float(data['c'][-1])
         print('closed price =', now_price)
         # high_track
-        high_track = data['h'][-31:-1]
-        high_track.sort(reverse=True)
-        print('high_track =', high_track[0])
+        high = data['h'][-31:-1]
+        high.sort(reverse=True)
+        high_track = float(high[0])
+        print('high_track =', high_track)
+
         # low_track
-        low_track = data['l'][-31:-1]
-        low_track.sort()
-        print('low_track =', low_track[0])
+        low = data['l'][-31:-1]
+        low.sort()
+        low_track = float(low[0])
+        print('low_track =', low_track)
+
         # interval_range
-        interval_range = (high_track[0] - low_track[0]) / (high_track[0] + low_track[0])
+        interval_range = (high_track - low_track) / (high_track + low_track)
         print('interval_range =', interval_range)
 
         order_flag = 0
         # current position qty of the symbol
-        position_details = trade.get_position_details(symbol)
-        print('current position qty of the symbol =', position_details['currentQty'])
-        if position_details['currentQty'] > 0:
+        position_details = shock.trade.get_position_details(shock.symbol)
+        position_qty = int(position_details['currentQty'])
+        print('current position qty of the symbol =', position_qty)
+        if position_qty > 0:
             order_flag = 1
-        elif position_details['currentQty'] < 0:
+        elif position_qty < 0:
             order_flag = -1
 
-        if order_flag == 1 and now_price < low_track[0]:
-            order = trade.create_limit_order(symbol, 'sell', position_details['realLeverage'],
-                                             position_details['currentQty'], now_price)
+        if order_flag == 1 and now_price < low_track:
+            order = shock.trade.create_limit_order(shock.symbol, 'sell', position_details['realLeverage'],
+                                                   position_qty, now_price)
             print('order_flag == 1,order id =', order['orderId'])
             order_flag = 0
-        elif order_flag == -1 and now_price > high_track[0]:
-            order = trade.create_limit_order(symbol, 'buy', position_details['realLeverage'],
-                                             position_details['currentQty'], now_price)
+        elif order_flag == -1 and now_price > high_track:
+            order = shock.trade.create_limit_order(shock.symbol, 'buy', position_details['realLeverage'],
+                                                   position_qty, now_price)
             print('order_flag == -1,order id =', order['orderId'])
             order_flag = 0
 
-        if interval_range < valve and order_flag == 0:
-            if now_price > high_track[0]:
-                order = trade.create_limit_order(symbol, 'buy', leverage, size, now_price)
+        if interval_range < shock.valve and order_flag == 0:
+            if now_price > high_track:
+                order = shock.trade.create_limit_order(shock.symbol, 'buy', shock.leverage, shock.size, now_price)
                 print('now price > high track,buy order id =', order['orderId'])
                 order_flag = 1
-            if now_price < high_track[0]:
-                order = trade.create_limit_order(symbol, 'sell', leverage, size, now_price)
+            if now_price < high_track:
+                order = shock.trade.create_limit_order(shock.symbol, 'sell', shock.leverage, shock.size, now_price)
                 print('now price < high track,sell order id =', order['orderId'])
                 order_flag = -1

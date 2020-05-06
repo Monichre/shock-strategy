@@ -12,7 +12,7 @@
 
 如果区间幅度小于阈值a，价格向下突破上轨，卖出开仓，价格突破上轨平仓  
 
-![shock_CN](/Users/arthur/www/academy/shock-strategy/README_CN.assets/shock_CN.png)
+![shock_CN](shock_CN.png)
 
 **此外，KuCoin拥有level3级别的交易数据、极优的撮合引擎，以及对api用户提供特别的手续费折扣，极大程度的减少了你在策略实施时的劣势，同时提供sandbox环境作为数据测试支撑，帮助你规避风险**。
 

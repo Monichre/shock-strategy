@@ -1,9 +1,9 @@
 # Shock_strategy
 
 [![Logo](https://img.shields.io/badge/KuCoin-KuMex-yellowgreen?style=flat-square)](https://github.com/Kucoin-academy/Guide)
-[![GitHub stars](https://img.shields.io/github/stars/Kucoin-academy/simple-grid.svg?label=Stars&style=flat-square)](https://github.com/Kucoin-academy/simple-grid)
-[![GitHub forks](https://img.shields.io/github/forks/Kucoin-academy/simple-grid.svg?label=Fork&style=flat-square)](https://github.com/Kucoin-academy/simple-grid)
-[![GitHub issues](https://img.shields.io/github/issues/Kucoin-academy/simple-grid.svg?label=Issue&style=flat-square)](https://github.com/Kucoin-academy/simple-grid/issues)
+[![GitHub stars](https://img.shields.io/github/stars/Kucoin-academy/shock-strategy.svg?label=Stars&style=flat-square)](https://github.com/Kucoin-academy/shock-strategy)
+[![GitHub forks](https://img.shields.io/github/forks/Kucoin-academy/shock-strategy.svg?label=Fork&style=flat-square)](https://github.com/Kucoin-academy/shock-strategy)
+[![GitHub issues](https://img.shields.io/github/issues/Kucoin-academy/shock-strategy.svg?label=Issue&style=flat-square)](https://github.com/Kucoin-academy/shock-strategy/issues)
 
 [![](https://img.shields.io/badge/lang-English-informational.svg?longCache=true&style=flat-square)](README.md)
 [![](https://img.shields.io/badge/lang-Chinese-red.svg?longCache=true&style=flat-square)](README_CN.md)
@@ -21,6 +21,8 @@ If range < a(threshold) & price breaks up the UP line, open long position, if pr
 If range < a(threshold) & price falls below the UP line, open short position, if  price breaks up the UP line, close position.  
 
 ![shock](./img/shock.png)
+
+**The picture above is the simulation operation of the shock strategy, where the blue part represents shorting and the red represents longing, and the width of the area represents the position holding time. In the chronological order, the left represents opening position, and the right represents closing position. The perPrf represents the income of the region, positive numbers indicate profit, negative numbers indicate loss**.
 
 **KuCoin** provides **the transaction data of level 3, great matching engine, and the commission discount specially offers to the API customers**. At the same time, we offer the **sandbox environment** as the data testing support to avoid the risks.
 

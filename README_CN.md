@@ -78,7 +78,7 @@
 
   ![pip_install](./img/pip_install.gif)
   
-* 在你需要跑策略的位置新建文件夹（例如桌面），**右键**点击新建的文件夹选择**“新建位于文件夹位置的终端窗口”**（**windows系统**：在右键点击文件夹点击**git Bash here**），在弹出的窗口中输入以下命令，克隆项目至本地，完成后本地会新增文件夹**simple-grid**：
+* 在你需要跑策略的位置新建文件夹（例如桌面），**右键**点击新建的文件夹选择**“新建位于文件夹位置的终端窗口”**（**windows系统**：在右键点击文件夹点击**git Bash here**），在弹出的窗口中输入以下命令，克隆项目至本地，完成后本地会新增文件夹**shock-strategy**：
   
   ```shell
   git clone https://github.com/Kucoin-academy/shock-strategy.git

@@ -42,7 +42,7 @@ Surely, if you encounter any problems in this process, or you have a profitable 
 
       <img src="./img/python_win.png" style="zoom:40%" />
 
-  * For MAC OS
+  * For MAC OS X
 
     * Open terminal and enter the following command to download Homebrew(During the installation, you need to enter the **computer password**):
 
@@ -74,7 +74,7 @@ Surely, if you encounter any problems in this process, or you have a profitable 
 
   ![pip_install](./img/pip_install.gif)
   
-* Create a new folder (such as the desktop) at the location where you need to run the strategy, right click on the newly created folder and select "**Create a new terminal window at the folder location**"(For Windows, right click the folder and select "**git Bash here**"), enter the following command in the pop-up window to clone the project to the local, and a folder **simple-grid** will be added locally after completion:
+* Create a new folder (such as the desktop) at the location where you need to run the strategy, right click on the newly created folder and select "**Create a new terminal window at the folder location**"(For Windows, right click the folder and select "**git Bash here**"), enter the following command in the pop-up window to clone the project to the local, and a folder **shock-strategy** will be added locally after completion:
   
   ```shell
   git clone https://github.com/Kucoin-academy/shock-strategy.git

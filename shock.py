@@ -62,8 +62,8 @@ class Shock(object):
         self.symbol = config['symbol']
         self.resolution = int(config['resolution'])
         self.valve = float(config['valve'])
-        self.leverage = config['leverage']
-        self.size = config['size']
+        self.leverage = float(config['leverage'])
+        self.size = int(config['size'])
         self.trade = Trade(self.api_key, self.api_secret, self.api_passphrase, is_sandbox=self.sandbox)
 
 
@@ -78,7 +78,7 @@ if __name__ == "__main__":
         print('symbol closed time =', data['t'][-1])
         if time_to != data['t'][-1]:
             continue
-        now_price = float(data['c'][-1])
+        now_price = int(data['c'][-1])
         print('closed price =', now_price)
         # high_track
         high = data['h'][-31:-1]

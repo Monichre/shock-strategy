@@ -43,7 +43,7 @@ if __name__ == "__main__":
         print('closed price =', now_price)
         # high_track
         high = []
-        for index in range(-31, -1):
+        for index in range(-30, 0):
             high.append(data[index][2])
         high.sort(reverse=True)
         high_track = float(high[0])
@@ -51,7 +51,7 @@ if __name__ == "__main__":
 
         # low_track
         low = []
-        for index in range(-31, -1):
+        for index in range(-30, 0):
             low.append(data[index][3])
         low.sort()
         low_track = float(low[0])

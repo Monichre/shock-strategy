@@ -4,48 +4,7 @@
 
 import json
 import time
-
-import requests
-from kumex.client import Trade
-
-
-def check_response_data(response_data):
-    if response_data.status_code == 200:
-        try:
-            d = response_data.json()
-        except ValueError:
-            raise Exception(response_data.content)
-        else:
-            if d and d.get('s'):
-                if d.get('s') == 'ok':
-                    return d
-                else:
-                    raise Exception("{}-{}".format(response_data.status_code, response_data.text))
-    else:
-        raise Exception("{}-{}".format(response_data.status_code, response_data.text))
-
-
-def get_kline(s, r, f, t, timeout=5, is_sandbox=False):
-    headers = {}
-    url = 'https://kitchen.kumex.com/kumex-kline/history'
-    if is_sandbox:
-        url = 'https://kitchen-sdb.kumex.com/kumex-kline/history'
-    uri_path = url
-    data_json = ''
-    p = []
-    if s:
-        p.append("{}={}".format('symbol', s))
-    if r:
-        p.append("{}={}".format('resolution', r))
-    if f:
-        p.append("{}={}".format('from', f))
-    if t:
-        p.append("{}={}".format('to', t))
-    data_json += '&'.join(p)
-    uri_path += '?' + data_json
-
-    response_data = requests.request('GET', uri_path, headers=headers, timeout=timeout)
-    return check_response_data(response_data)
+from kumex.client import Trade, Market
 
 
 class Shock(object):
@@ -64,6 +23,7 @@ class Shock(object):
         self.valve = float(config['valve'])
         self.leverage = float(config['leverage'])
         self.size = int(config['size'])
+        self.market = Market(self.api_key, self.api_secret, self.api_passphrase, is_sandbox=self.sandbox)
         self.trade = Trade(self.api_key, self.api_secret, self.api_passphrase, is_sandbox=self.sandbox)
 
 
@@ -71,23 +31,28 @@ if __name__ == "__main__":
     shock = Shock()
 
     while 1:
-        time_to = int(time.time())
-        time_from = time_to - shock.resolution * 60 * 35
-        data = get_kline(shock.symbol, shock.resolution, time_from, time_to, is_sandbox=shock.sandbox)
+        time_to = int(time.time() * 1000)
+        time_from = time_to - shock.resolution * 60 * 35 * 1000
+        data = shock.market.get_kline_data(shock.symbol, shock.resolution, 0, 0)
         print('now time =', time_to)
-        print('symbol closed time =', data['t'][-1])
-        if time_to != data['t'][-1]:
+        print('symbol closed time =', data[-1][0])
+
+        if time_to != data[-1][0]:
             continue
-        now_price = int(data['c'][-1])
+        now_price = int(data[-1][4])
         print('closed price =', now_price)
         # high_track
-        high = data['h'][-31:-1]
+        high = []
+        for index in range(-31, -1):
+            high.append(data[index][2])
         high.sort(reverse=True)
         high_track = float(high[0])
         print('high_track =', high_track)
 
         # low_track
-        low = data['l'][-31:-1]
+        low = []
+        for index in range(-31, -1):
+            low.append(data[index][3])
         low.sort()
         low_track = float(low[0])
         print('low_track =', low_track)

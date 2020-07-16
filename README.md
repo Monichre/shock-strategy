@@ -73,7 +73,7 @@
 * 在命令终端输入以下命令，安装项目依赖：
 
   ```shell script
-  pip3 install python-kumex
+  pip3 install kumex-python
   ```
 
   ![pip_install](./img/pip_install.gif)

@@ -71,7 +71,7 @@ Surely, if you encounter any problems in this process, or you have a profitable 
 * Enter the following command in terminal to install the dependency:
 
   ```shell script
-  pip3 install python-kumex
+  pip3 install kumex-python
   ```
 
   ![pip_install](./img/pip_install.gif)
